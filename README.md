@@ -1,4 +1,4 @@
-# Experiment--02-Experiment-1-8086-Architecture-and-Register-Operations
+# Experiment--2-Experiment-1-8086-Architecture-and-Register-Operations
  
 ## Aim
 
@@ -52,10 +52,39 @@ required.
 
 ### Simplified Block Diagram
 
-<img width="600" height="456" alt="image" src="https://github.com/user-attachments/assets/1d1135ac-67da-4330-8d2a-419d3a170f7a" />
-
-
-
+``` text
+                 +-----------------------------------+
+                 |          8086 MICROPROCESSOR     |
+                 |                                   |
+Memory / I/O <-->+-----------------------------------+<--> System Bus
+                 |       Bus Interface Unit (BIU)    |
+                 |  +-----------------------------+  |
+                 |  | Segment Registers            |  |
+                 |  | CS, DS, SS, ES               |  |
+                 |  +-----------------------------+  |
+                 |  | Instruction Pointer (IP)     |  |
+                 |  +-----------------------------+  |
+                 |  | 6-byte Instruction Queue     |  |
+                 |  +-----------------------------+  |
+                 |  | Address Generation / Bus     |  |
+                 |  | Control                      |  |
+                 |  +---------------+-------------+  |
+                 |                  |                |
+                 |       Instruction/Data Interface  |
+                 |                  |                |
+                 |       Execution Unit (EU)         |
+                 |  +-----------------------------+  |
+                 |  | Instruction Decoder &       |  |
+                 |  | Control Circuitry           |  |
+                 |  +-----------------------------+  |
+                 |  | ALU                         |  |
+                 |  +-----------------------------+  |
+                 |  | AX, BX, CX, DX               |  |
+                 |  | SP, BP, SI, DI               |  |
+                 |  | Flag Register                |  |
+                 |  +-----------------------------+  |
+                 +-----------------------------------+
+```
 
 ### Working Principle
 
@@ -110,6 +139,8 @@ END MAIN
 -   AX = `1234H`
 -   BX = `1234H`
 -   RESULT = `1234H`
+-   <img width="1302" height="685" alt="image" src="https://github.com/user-attachments/assets/21763e3c-fa38-45cb-9721-89d4442d11fa" />
+
 
 ### Explanation
 
@@ -117,6 +148,7 @@ END MAIN
 AX. `MOV RESULT, BX` stores the contents of BX in the 16-bit memory
 variable `RESULT`. The `MOV` instruction does not modify the source
 operand.
+
 
 ------------------------------------------------------------------------
 
@@ -136,7 +168,25 @@ Write an 8086 assembly language program to exchange the contents of two
 5.  Stop the program.
 
 ### Assembly Program
+.MODEL SMALL
+.STACK 100H
 
+.DATA
+    VALUE1 DW 1111H
+    VALUE2 DW 2222H
+
+.CODE
+    MOV AX, @DATA
+    MOV DS, AX
+
+    MOV AX, VALUE1      ; AX = 1111H
+    MOV BX, VALUE2      ; BX = 2222H
+    MOV VALUE1, BX      ; VALUE1 = 2222H
+    MOV VALUE2, AX      ; VALUE2 = 1111H
+
+    MOV AH, 4CH
+    INT 21H
+END
  
 
 ### Expected Result
@@ -147,6 +197,9 @@ Write an 8086 assembly language program to exchange the contents of two
   VALUE2                       `2222H`           `1111H`
 
 ### Explanation
+This program exchanges the contents of two 16-bit memory locations, VALUE1 and VALUE2, using the AX and BX registers as temporary storage.
+
+Why registers are needed: The 8086 does not allow a MOV directly from one memory location to another. The values must first be loaded into registers, and then written back to the opposite locations.
 
   
 ------------------------------------------------------------------------
@@ -162,6 +215,8 @@ Write an 8086 assembly language program to exchange the contents of two
 7.  Record the observed results and compare them with the expected
     results.
 ## Screenshot of the results 
+<img width="1314" height="687" alt="image" src="https://github.com/user-attachments/assets/170bffaa-6f20-4861-b503-75698b3f3660" />
+
 
 
 
